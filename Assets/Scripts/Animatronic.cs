@@ -36,7 +36,6 @@ public class Animatronic : MonoBehaviour
 
     private bool playerHasFalshed;
     [SerializeField]private bool HasRan;
-    private bool aboutMove;
 
     private Vector3 startPos;
     private Vector3 stairsTopPos;
@@ -110,17 +109,21 @@ public class Animatronic : MonoBehaviour
             }
             if(playerHasFalshed == false && time > 10)
             {
-                Debug.Log("HUH");
-                manager.GameOver();
+                if(player.atLeftDoor == true)
+                {
+                    player.PlayAlive = false;
+                    tpAnimation.Play("RightHallJumpscare");
+                    manager.playerAnim.Play("FHallJumpPlayer");
+                    StartCoroutine(manager.waitForJumpscare(5));
+                }
+                else
+                {
+                    player.PlayAlive = false;
+                    tpAnimation.Play("RoomJumpscare");
+                    manager.playerAnim.Play("FRoomJumpPlayer");
+                    StartCoroutine(manager.waitForJumpscare(5));
+                }
             }
-        }
-        if(aboutMove == true)
-        {
-            manager.camErrorOn();
-        }
-        if(aboutMove == false)
-        {
-            manager.camErrorOff();
         }
     }
 
@@ -128,6 +131,9 @@ public class Animatronic : MonoBehaviour
     {
         switch(Manager.nightNum)
         {
+        //case 0:
+            //teleportTime = Random.Range(5f, 10f);
+            //break;
         case 1:
             teleportTime = Random.Range(40f, 50f);
             break;
@@ -152,11 +158,11 @@ public class Animatronic : MonoBehaviour
         enteringHallBool = false;
         HasRan = false;
         playerHasFalshed = false;
-        aboutMove = true;
+        manager.aboutMove = true;
         tpAnimation.Play("Hidding_Pos");
         transform.position = hiddingPos;
         yield return new WaitForSeconds(1);
-        aboutMove = false;
+        manager.aboutMove = false;
         yield return new WaitForSeconds(teleportTime);
         teleportChoice = 0;
         teleportChoice = Random.Range(1,4);
@@ -261,54 +267,54 @@ public class Animatronic : MonoBehaviour
         teleportTimeSetter();
         yield return new WaitForSeconds(teleportTime);
         Debug.Log("bru");
-        aboutMove = true;
+        manager.aboutMove = true;
         tpAnimation.Play("Start_Pos");
         transform.position = startPos;
         yield return new WaitForSeconds(1);
-        aboutMove = false;
+        manager.aboutMove = false;
         startPositionBool = true;
     }
     IEnumerator StairsTopTimer()
     {
         teleportTimeSetter();
-        aboutMove = true;
+        manager.aboutMove = true;
         tpAnimation.Play("Stairs_Top");
         transform.position = stairsTopPos;
         yield return new WaitForSeconds(1);
-        aboutMove = false;
+        manager.aboutMove = false;
         yield return new WaitForSeconds(teleportTime);
         stairsTopBool = true;
     }
     IEnumerator StairsMidTimer()
     {
         teleportTimeSetter();
-        aboutMove = true;
+        manager.aboutMove = true;
         tpAnimation.Play("Stairs_Mid");
         transform.position = stairsMidPos;
         yield return new WaitForSeconds(1);
-        aboutMove = false;
+        manager.aboutMove = false;
         yield return new WaitForSeconds(teleportTime);
         stairsMidBool = true;
     }
     IEnumerator EnteringHallTimer()
     {
         teleportTimeSetter();
-        aboutMove = true;
+        manager.aboutMove = true;
         tpAnimation.Play("Entering_Hall");
         transform.position = enteringHallPos;
         enteringHallBool = true;
         yield return new WaitForSeconds(1);
-        aboutMove = false;
+        manager.aboutMove = false;
         yield return new WaitForSeconds(teleportTime);
     }
     IEnumerator LookingAwayTimer()
     {
         teleportTimeSetter();
-        aboutMove = true;
+        manager.aboutMove = true;
         tpAnimation.Play("Looking_Away");
         transform.position = facingAwayPos;
         yield return new WaitForSeconds(1);
-        aboutMove = false;
+        manager.aboutMove = false;
         yield return new WaitForSeconds(teleportTime);
         facingAwayBool = true;
     }

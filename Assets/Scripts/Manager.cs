@@ -6,13 +6,20 @@ using UnityEngine.SceneManagement;
 
 public class Manager : MonoBehaviour
 {
+    public Animator playerAnim;
+    
     public AudioSource winAudio;
 
+    public GameObject player;
     public GameObject gameoverUI;
     public GameObject gameWonUI;
     public GameObject camErrorUI;
     public GameObject startNightUI;
     public GameObject nextNightUI;
+
+    public GameObject bonnie;
+    public GameObject bonnieJumpscare;
+
     public Text nightStartText;
 
     public GameObject clock1am;
@@ -22,17 +29,21 @@ public class Manager : MonoBehaviour
     public GameObject clock5am;
     public GameObject clock6am;
     public GameObject clock12am;
+    public GameObject winEffect;
 
     public float currentTime;
 
     public static int nightNum;
 
     public bool hasRun;
+    public bool aboutMove;
+    //public bool BJumpscare;
 
     // Start is called before the first frame update
     void Start()
     {
         Time.timeScale = 1;
+        playerAnim = player.GetComponent<Animator>();
         nextNightUI.SetActive(false);
         currentTime = 0;
         gameStart();
@@ -43,6 +54,21 @@ public class Manager : MonoBehaviour
     {
         currentTime += Time.deltaTime;
         changeClockFace();
+
+        if(aboutMove == true)
+        {
+            camErrorOn();
+        }
+        if(aboutMove == false)
+        {
+            camErrorOff();
+        }
+        //if(BJumpscare == true)
+       //{
+            //bonnie.SetActive(false);
+            //bonnieJumpscare.SetActive(true);
+            //StartCoroutine(waitForJumpscare());
+        //}
     }
 
     private void changeClockFace()
@@ -86,6 +112,7 @@ public class Manager : MonoBehaviour
     {
         winAudio.Play();
         gameWonUI.SetActive(true);
+        winEffect.SetActive(true);
         StartCoroutine(waitForNextNightUI());
         Time.timeScale = 0;
         NextNight();
@@ -158,5 +185,11 @@ public class Manager : MonoBehaviour
     {
         yield return new WaitForSecondsRealtime(4);
         SceneManager.LoadScene("Menu");
+    }
+
+    public IEnumerator waitForJumpscare(float waitCertainTime)
+    {
+        yield return new WaitForSecondsRealtime(waitCertainTime);
+        GameOver();
     }
 }

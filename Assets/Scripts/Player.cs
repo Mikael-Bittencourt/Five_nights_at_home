@@ -17,10 +17,11 @@ public class Player : MonoBehaviour
 
     //Variables to activate
     private bool facingAwayFlash;
-    private bool atLeftDoor;
-    private bool atRightDoor;
-    private bool rightDoorClosed;
+    public bool atLeftDoor;
+    public bool atRightDoor;
+    public bool rightDoorClosed;
     private bool leftDoorClosed;
+    public bool PlayAlive;
 
     public bool isFlashing;
 
@@ -40,6 +41,7 @@ public class Player : MonoBehaviour
         rightDoorClosed = false;
         leftDoorClosed = false;
         isFlashing =false;
+        PlayAlive = true;
 
         cameraAnim = playerCamera.GetComponent<Animator>();
         leftDoorAnim = leftDoor.GetComponent<Animator>();
@@ -51,34 +53,34 @@ public class Player : MonoBehaviour
     void Update()
     {
         // Movement and animation
-        if(Input.GetKeyDown(KeyCode.D) && atLeftDoor == false)
+        if(Input.GetKeyDown(KeyCode.D) && atLeftDoor == false && PlayAlive == true)
         {
             cameraAnim.SetBool("IsAtRightDoor", true);
             atRightDoor = true;
         }
-        if(Input.GetKeyDown(KeyCode.A) && atRightDoor == false)
+        if(Input.GetKeyDown(KeyCode.A) && atRightDoor == false && PlayAlive == true)
         {
             cameraAnim.SetBool("IsAtLeftDoor", true);
             atLeftDoor = true;
             facingAwayFlash = true;
         }
-        if(Input.GetKeyDown(KeyCode.A) && atRightDoor == true)
+        if(Input.GetKeyDown(KeyCode.A) && atRightDoor == true && PlayAlive == true)
         {
             cameraAnim.SetBool("IsAtRightDoor", false);
             atRightDoor = false;
         }
-        if(Input.GetKeyDown(KeyCode.D) && atLeftDoor == true)
+        if(Input.GetKeyDown(KeyCode.D) && atLeftDoor == true && PlayAlive == true)
         {
             cameraAnim.SetBool("IsAtLeftDoor", false);
             atLeftDoor = false;
             facingAwayFlash = false;
         }
-        if(Input.GetKeyDown(KeyCode.W) && atLeftDoor == false && atRightDoor == false)
+        if(Input.GetKeyDown(KeyCode.W) && atLeftDoor == false && atRightDoor == false && PlayAlive == true)
         {
             cameraAnim.SetBool("EnterCam", true);
             StartCoroutine(waitStartAnim(1));
         }
-        if(Input.GetKeyDown(KeyCode.S) && atLeftDoor == false && atRightDoor == false)
+        if(Input.GetKeyDown(KeyCode.S) && atLeftDoor == false && atRightDoor == false && PlayAlive == true)
         {
             cameraUI.SetActive(false);
             cameraAnim.SetBool("EnterCam", false);
@@ -94,7 +96,7 @@ public class Player : MonoBehaviour
     void FlashLight()
     {
         //Flashlight logic
-        if(facingAwayFlash == true && leftDoorClosed == false)
+        if(facingAwayFlash == true && leftDoorClosed == false && PlayAlive == true)
         {
             if(Input.GetKeyDown(KeyCode.E))
             {
