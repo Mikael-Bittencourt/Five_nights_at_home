@@ -6,7 +6,10 @@ using UnityEngine.SceneManagement;
 
 public class Manager : MonoBehaviour
 {
+    public Player playerScript;
+
     public Animator playerAnim;
+    public Animator powerBoxAnim;
     
     public AudioSource winAudio;
 
@@ -16,11 +19,17 @@ public class Manager : MonoBehaviour
     public GameObject camErrorUI;
     public GameObject startNightUI;
     public GameObject nextNightUI;
+    public GameObject chicaResetButton;
+    public GameObject paycheckUI;
 
+    //Animatronics gameobject
+    public GameObject freddy;
+    public GameObject chica;
     public GameObject bonnie;
-    public GameObject bonnieJumpscare;
+    public GameObject cupcake;
 
     public Text nightStartText;
+    public Text energyAmountText;
 
     public GameObject clock1am;
     public GameObject clock2am;
@@ -30,18 +39,35 @@ public class Manager : MonoBehaviour
     public GameObject clock6am;
     public GameObject clock12am;
     public GameObject winEffect;
+    public GameObject arrowControls;
 
     public float currentTime;
+    private float nextBatteryActionTime = 0f;
+    [SerializeField] private float defaultUseBatteryPeriod;
+    [SerializeField] private float camUseBatteryPeriod;
+
+    private float timeDifference = 1f;
+    private float SpeedOfPowerIncrease = 0.5f;
 
     public static int nightNum;
 
+    [SerializeField] private float energyAmount;
+
     public bool hasRun;
     public bool aboutMove;
-    //public bool BJumpscare;
+    public bool resetButtonPressed;
+    public bool chicaOn;
+    public bool loopRan;
+    public bool powerAvailable;
+    public bool generatorOff;
 
     // Start is called before the first frame update
     void Start()
     {
+        //IntialEnergyAmount = 100;
+        energyAmount = 100;
+        powerAvailable = true;
+
         Time.timeScale = 1;
         playerAnim = player.GetComponent<Animator>();
         nextNightUI.SetActive(false);
@@ -63,12 +89,57 @@ public class Manager : MonoBehaviour
         {
             camErrorOff();
         }
-        //if(BJumpscare == true)
-       //{
-            //bonnie.SetActive(false);
-            //bonnieJumpscare.SetActive(true);
-            //StartCoroutine(waitForJumpscare());
-        //}
+        if(Time.time > nextBatteryActionTime)
+        {
+            if(playerScript.camOn == true)
+            {
+                nextBatteryActionTime += camUseBatteryPeriod;
+                energyAmount -= 1;
+                Debug.Log("Cam battery");
+            }
+            else if(playerScript.camOn == false)
+            {
+                nextBatteryActionTime += defaultUseBatteryPeriod;
+                energyAmount -= 1; 
+                Debug.Log("standard battery");
+            }
+            updateEnergyText();
+        }
+        if(energyAmount <= 0)
+        {
+            powerAvailable = false;
+        }
+        if(Input.GetKey(KeyCode.Space) && playerScript.atPowerBox == true && energyAmount <= 100)
+        {
+            generatorOff = true;
+            powerBoxAnim.Play("PowerBoxOffAnim");
+        }
+        if(Input.GetKey(KeyCode.Space) == false)
+        {
+            generatorOff = false;
+            powerBoxAnim.Play("PowerBoxOnAnim");
+        }
+        if(generatorOff == true && energyAmount < 100 && Time.time > timeDifference)
+        {
+            timeDifference += Time.time - timeDifference + SpeedOfPowerIncrease;
+            energyAmount += 1;
+        }
+
+        //animatronic night enabling
+        if(nightNum == 1 || nightNum == 2)
+        {
+            freddy.SetActive(true);
+            bonnie.SetActive(true);
+            chica.SetActive(false);
+            cupcake.SetActive(false);
+        }
+        else
+        {
+            freddy.SetActive(true);
+            bonnie.SetActive(true);
+            chica.SetActive(true);
+            cupcake.SetActive(true);
+        }
     }
 
     private void changeClockFace()
@@ -113,9 +184,19 @@ public class Manager : MonoBehaviour
         winAudio.Play();
         gameWonUI.SetActive(true);
         winEffect.SetActive(true);
-        StartCoroutine(waitForNextNightUI());
+        if(nightNum < 5)
+        {
+            StartCoroutine(waitForNextNightUI());
+        }
+        else if(nightNum == 5)
+        {
+            StartCoroutine(waitForPaycheckUI());
+        }
         Time.timeScale = 0;
-        NextNight();
+        if(nightNum < 5)
+        {
+            NextNight();
+        }
         SaveMaxNight();
         //nextNightUI.SetActive(true);
         //StartCoroutine(waitForNextNightUI());
@@ -123,6 +204,7 @@ public class Manager : MonoBehaviour
 
     public void GameOver()
     {
+        arrowControls.SetActive(false);
         gameoverUI.SetActive(true);
         Time.timeScale = 0;
         StartCoroutine(waitForBacktoMenu());
@@ -174,6 +256,7 @@ public class Manager : MonoBehaviour
     {
         yield return new WaitForSeconds(3);
         startNightUI.SetActive(false);
+        arrowControls.SetActive(true);
     }
 
     IEnumerator waitForNextNightUI()
@@ -191,5 +274,21 @@ public class Manager : MonoBehaviour
     {
         yield return new WaitForSecondsRealtime(waitCertainTime);
         GameOver();
+    }
+    IEnumerator waitForPaycheckUI()
+    {
+        yield return new WaitForSecondsRealtime(13);
+        paycheckUI.SetActive(true);
+    }
+    public void resetChica()
+    {
+        resetButtonPressed = true;
+        energyAmount -= 10;
+        updateEnergyText();
+    }
+
+    public void updateEnergyText()
+    {
+        energyAmountText.text = energyAmount + " %";
     }
 }

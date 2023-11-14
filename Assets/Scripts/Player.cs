@@ -4,16 +4,20 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    public Manager manager;
+
     // Objects to manibulate
     public GameObject playerCamera;
     public GameObject light;
     public GameObject camera1;
     public GameObject camera2;
     public GameObject camera3;
+    public GameObject camera4;
     public GameObject cameraUI;
     public GameObject leftDoor;
     public GameObject rightDoor;
     public GameObject camEffect;
+    public GameObject pupetMask;
 
     //Variables to activate
     private bool facingAwayFlash;
@@ -24,6 +28,10 @@ public class Player : MonoBehaviour
     public bool PlayAlive;
 
     public bool isFlashing;
+    public bool pupetMaskOn;
+    public bool camOn;
+    public bool isTurnedAround;
+    public bool atPowerBox;
 
     // Animators
     private Animator cameraAnim;
@@ -52,45 +60,90 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // Movement and animation
-        if(Input.GetKeyDown(KeyCode.D) && atLeftDoor == false && PlayAlive == true)
+        // Movement and animation old version
+        //if(Input.GetKeyDown(KeyCode.D) && atLeftDoor == false && PlayAlive == true && isTurnedAround == false)
+        //{
+            //cameraAnim.SetBool("IsAtRightDoor", true);
+            //atRightDoor = true;
+        //}
+        //if(Input.GetKeyDown(KeyCode.A) && atRightDoor == false && PlayAlive == true && isTurnedAround == false)
+        //{
+            //cameraAnim.SetBool("IsAtLeftDoor", true);
+            //atLeftDoor = true;
+            //facingAwayFlash = true;
+        //}
+        //if(Input.GetKeyDown(KeyCode.A) && atRightDoor == true && PlayAlive == true && isTurnedAround == false)
+        //{
+            //cameraAnim.SetBool("IsAtRightDoor", false);
+            //atRightDoor = false;
+        //}
+        //if(Input.GetKeyDown(KeyCode.D) && atLeftDoor == true && PlayAlive == true && isTurnedAround == false)
+        //{
+            //cameraAnim.SetBool("IsAtLeftDoor", false);
+            //atLeftDoor = false;
+            //facingAwayFlash = false;
+        //}
+        //if(Input.GetKeyDown(KeyCode.W) && atLeftDoor == false && atRightDoor == false && PlayAlive == true && manager.powerAvailable == true && isTurnedAround == false)
+        //{
+            //camOn = true;
+            //cameraAnim.SetBool("EnterCam", true);
+            //StartCoroutine(waitStartAnim(1));
+        //}
+        // to turn around
+        //if(Input.GetKeyDown(KeyCode.S) && atLeftDoor == false && atRightDoor == false && PlayAlive == true && camOn == false)
+        //{
+            //if(isTurnedAround == false)
+            //{
+                //cameraAnim.SetBool("TurnAroundAnimBool", true);
+                //isTurnedAround = true; 
+            //}
+            //else if(isTurnedAround == true)
+            //{
+                //isTurnedAround = false;
+                //cameraAnim.SetBool("TurnAroundAnimBool", false);
+            //}
+        //}
+        // to leave camera view
+        //if(Input.GetKeyDown(KeyCode.S) && atLeftDoor == false && atRightDoor == false && PlayAlive == true && camOn == true)
+        //{
+            //camOn = false;
+            //cameraUI.SetActive(false);
+            //cameraAnim.SetBool("EnterCam", false);
+            //camera1.SetActive(false);
+            //camera2.SetActive(false);
+            //camera3.SetActive(false);
+            //camera4.SetActive(false);
+        //}
+        if(manager.powerAvailable == false)
         {
-            cameraAnim.SetBool("IsAtRightDoor", true);
-            atRightDoor = true;
-        }
-        if(Input.GetKeyDown(KeyCode.A) && atRightDoor == false && PlayAlive == true)
-        {
-            cameraAnim.SetBool("IsAtLeftDoor", true);
-            atLeftDoor = true;
-            facingAwayFlash = true;
-        }
-        if(Input.GetKeyDown(KeyCode.A) && atRightDoor == true && PlayAlive == true)
-        {
-            cameraAnim.SetBool("IsAtRightDoor", false);
-            atRightDoor = false;
-        }
-        if(Input.GetKeyDown(KeyCode.D) && atLeftDoor == true && PlayAlive == true)
-        {
-            cameraAnim.SetBool("IsAtLeftDoor", false);
-            atLeftDoor = false;
-            facingAwayFlash = false;
-        }
-        if(Input.GetKeyDown(KeyCode.W) && atLeftDoor == false && atRightDoor == false && PlayAlive == true)
-        {
-            cameraAnim.SetBool("EnterCam", true);
-            StartCoroutine(waitStartAnim(1));
-        }
-        if(Input.GetKeyDown(KeyCode.S) && atLeftDoor == false && atRightDoor == false && PlayAlive == true)
-        {
+            camOn = false;
             cameraUI.SetActive(false);
             cameraAnim.SetBool("EnterCam", false);
             camera1.SetActive(false);
             camera2.SetActive(false);
             camera3.SetActive(false);
+            camera4.SetActive(false);
         }
         FlashLight();
         CloseLeftDoor();
         CloseRightDoor();
+        if(camera4.activeSelf == true)
+        {
+            manager.chicaResetButton.SetActive(true);
+        }
+        else
+        {
+            manager.chicaResetButton.SetActive(false);
+        }
+        if(PlayAlive == false)
+        {
+            cameraUI.SetActive(false);
+            camera1.SetActive(false);
+            camera2.SetActive(false);
+            camera3.SetActive(false);
+            camera4.SetActive(false);
+        }
+        MaskMechanic();
     }
 
     void FlashLight()
@@ -133,6 +186,23 @@ public class Player : MonoBehaviour
         }
     }
 
+    void MaskMechanic()
+    {
+        if(atRightDoor == false && atLeftDoor == false)
+        {
+            if(Input.GetKeyDown(KeyCode.F) && pupetMaskOn == false)
+            {
+                pupetMask.SetActive(true);
+                pupetMaskOn = true;   
+            }
+            else if(Input.GetKeyUp(KeyCode.F))
+            {
+                pupetMask.SetActive(false);
+                pupetMaskOn = false;
+            }
+        }
+    }
+
     void CloseRightDoor()
     {
         if(Input.GetKeyDown(KeyCode.Space) && atRightDoor == true)
@@ -159,5 +229,66 @@ public class Player : MonoBehaviour
         camOnAnim.SetBool("Camera_On", false);
         cameraUI.SetActive(true);
         camera1.SetActive(true);
+    }
+
+    public void goToDDoor()
+    {
+        cameraAnim.SetBool("IsAtRightDoor", true);
+        atRightDoor = true;
+    }
+    public void goToADoor()
+    {
+        cameraAnim.SetBool("IsAtLeftDoor", true);
+        atLeftDoor = true;
+        facingAwayFlash = true;
+    }
+    public void goBackFromRightDoor()
+    {
+        cameraAnim.SetBool("IsAtRightDoor", false);
+        atRightDoor = false;
+    }
+    public void goBackFromLeftDoor()
+    {
+        cameraAnim.SetBool("IsAtLeftDoor", false);
+        atLeftDoor = false;
+        facingAwayFlash = false;
+    }
+    public void LookBehind()
+    {
+        if(isTurnedAround == false)
+        {
+            cameraAnim.SetBool("TurnAroundAnimBool", true);
+            isTurnedAround = true; 
+        }
+        else if(isTurnedAround == true)
+        {
+            isTurnedAround = false;
+            cameraAnim.SetBool("TurnAroundAnimBool", false);
+        }
+    }
+    public void LookPowerBox()
+    {
+        atPowerBox = true;
+        cameraAnim.SetBool("PowerBoxAnim", true);
+    }
+    public void LookBackFromPowerBox()
+    {
+        cameraAnim.SetBool("PowerBoxAnim", false);
+    }
+    public void CameraOff()
+    {
+        camOn = false;
+        cameraUI.SetActive(false);
+        cameraAnim.SetBool("EnterCam", false);
+        camera1.SetActive(false);
+        camera2.SetActive(false);
+        camera3.SetActive(false);
+        camera4.SetActive(false);
+    }
+    public void CameraOn()
+    {
+        camOn = true;
+        cameraAnim.SetBool("EnterCam", true);
+        StartCoroutine(waitStartAnim(1));
     }
 }

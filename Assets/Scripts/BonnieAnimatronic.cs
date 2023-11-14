@@ -91,7 +91,7 @@ public class BonnieAnimatronic : MonoBehaviour
                 doorClosed = true;
                 StartCoroutine(BGoingBackTeleport());
             }
-            if(doorClosed == false && time > 10)
+            if(doorClosed == false && time > 10 && player.PlayAlive == true)
             {
                 if(player.atRightDoor == true)
                 {

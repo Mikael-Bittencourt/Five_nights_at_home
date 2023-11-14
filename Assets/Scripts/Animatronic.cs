@@ -107,7 +107,7 @@ public class Animatronic : MonoBehaviour
                 playerHasFalshed = true;
                 StartCoroutine(hiddingPosTeleport());
             }
-            if(playerHasFalshed == false && time > 10)
+            if(playerHasFalshed == false && time > 10 && player.PlayAlive == true)
             {
                 if(player.atLeftDoor == true)
                 {
