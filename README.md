@@ -1,4 +1,4 @@
-# Five_nights_at_home
+# Five Nights At Home
 
 (V1) September 2nd, 2023:
 Things currently included in game:
