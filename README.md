@@ -1,5 +1,28 @@
-# Five Nights At Home
+# Five Nights at Home
 
+## Description:
+Five Nights at Home is a Five Nights at Freddy's(Fnaf) inspired unity game. This was my first game that includes my own 3D assets made in blender as well as being done without using any tutorials. Game currently has 5 night difficulties and 4 enemies.
+
+## ScreenShots:
+![Screenshot 2024-10-05 161027](https://github.com/user-attachments/assets/f767f186-ce30-4e1b-a223-0a3c3ea8e3c6)
+![Screenshot 2024-10-05 160832](https://github.com/user-attachments/assets/514d6a01-4739-40ff-8335-73ad885221f0)
+![Screenshot 2024-10-05 160309](https://github.com/user-attachments/assets/3a8a3e2e-2973-43e3-809a-ac6012c5cf5c)
+![Win screen](https://github.com/user-attachments/assets/de4c1346-04e4-43f2-8e4b-b128e5433371)
+
+
+## What I learned:
+- How to save informartion in unity through PlayerPrefs
+- How to model enviorments, objects and humanoid beings in blender
+- How to set up and render images in blender
+- How to use unity's event trigger
+
+## Technologies utilized:
+- Programing language: C#
+- Game Engine: Unity v.2021
+- Modeling software: Blender
+- Sofware versioning: GitHub
+
+## Develogs:
 (V1) September 2nd, 2023:
 Things currently included in game:
 - office with fuctioning flashlight and ability to close both doors
@@ -25,9 +48,3 @@ things changed/added:
 - Player able to turn around
 - Some office props remodeled, mask prop added, new and altered animations
 - Jumpscares for newly added enemies
-
-Thing learned:
-- How to save informartion in unity through PlayerPrefs
-- How to model enviorments, objects and humanoid beings in blender
-- How to set up and render images in blender
-- How to use unity's event trigger
