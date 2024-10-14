@@ -3,11 +3,12 @@
 ## Description:
 Five Nights at Home is a Five Nights at Freddy's(Fnaf) inspired unity game. This was my first game that includes my own 3D assets made in blender as well as being done without using any tutorials. Game currently has 5 night difficulties and 4 enemies.
 
-## ScreenShots:
+## ScreenShots/GIFs:
 ![Screenshot 2024-10-05 161027](https://github.com/user-attachments/assets/f767f186-ce30-4e1b-a223-0a3c3ea8e3c6)
 ![Screenshot 2024-10-05 160832](https://github.com/user-attachments/assets/514d6a01-4739-40ff-8335-73ad885221f0)
 ![Screenshot 2024-10-05 160309](https://github.com/user-attachments/assets/3a8a3e2e-2973-43e3-809a-ac6012c5cf5c)
 ![Win screen](https://github.com/user-attachments/assets/de4c1346-04e4-43f2-8e4b-b128e5433371)
+![Untitled video - Made with Clipchamp (3)](https://github.com/user-attachments/assets/88d6216f-e5cc-45b7-b1ff-46531e1700b4)
 
 
 ## What I learned:
